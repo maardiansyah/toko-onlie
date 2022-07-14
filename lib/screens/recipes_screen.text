@@ -1,0 +1,24 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/api/mock_service.text';
+import 'package:flutter_application_1/components/recipe_grid_vied.dart';
+import 'package:flutter_application_1/model/simple_recipe.dart';
+
+class RecipesScreen extends StatelessWidget {
+  final exploreService = MockJsonService();
+
+  RecipesScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: exploreService.getRecipes(),
+      builder: (context, AsyncSnapshot<List<SimpleRecipe>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return RecipeGridView(recipes: snapshot.data ?? []);
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+}
